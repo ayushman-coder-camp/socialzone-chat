@@ -1,0 +1,13 @@
+{% extends 'base.html' %} {% block title %} Enter or Create a Chat Room {% endblock %}
+{% block content %}
+<form method="post">
+    <p class="error">{{ error }}</p>
+    <h2>Enter or Create a Room</h2>
+    <label>Name:</label>
+    <input type="text" name="name" placeholder="Enter your name (first or full)" value="{{ name }}"><br>
+    <label>Room Code:</label>
+    <input type="text" name="code" placeholder="Enter room code" value="{{ code }}"><br>
+    <button type="submit" name="enter-btn">Enter Chat Room</button><br>
+    <button type="submit" name="create-btn">Create Chat Room</button>
+</form>
+{% endblock %}

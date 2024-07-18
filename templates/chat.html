@@ -1,0 +1,48 @@
+{% extends 'base.html' %} {% block title %} Chat Room - Socialzone Chat {% endblock %}
+{% block content %}
+<div class="room-container">
+    <div class="room-header">
+        <h1>Chat Room {{ code }}</h1>
+    </div>
+    <div class="messages"></div>
+    <div class="msg-form">
+        <input type="text" name="message" id="msgInput" placeholder="Enter a message">
+        <button name="send" id="msg-btn" onClick="sendMessageText()">Send Message</button>
+    </div>
+</div>
+<script>
+    var socketio = io()
+    const messages = document.querySelector('.messages')
+
+    const makeMessage = (name, message) => {
+        const element = `
+        <div class='message-box'>
+            <div class='msg'>
+                <span class='name'>${name}</span>
+                <div class='text'>${message}</div>
+            </div>
+            <span class='date'>${new Date().toLocaleString()}</span>
+        </div>
+        `
+
+        messages.innerHTML += element
+    }
+    socketio.on('message', (data) => {
+        makeMessage(data.name, data.message)
+    })
+
+    const sendMessageText = () => {
+        const msgInput = document.querySelector('#msgInput')
+        if (msgInput == '') return
+
+        socketio.emit('message', {data: msgInput.value})
+        msgInput.value = ''
+        console.log('send message')
+    }
+</script>
+{% for text in messages %}
+<script>
+    makeMessage('{{ text.name }}', '{{ text.message }}')
+</script>
+{% endfor %}
+{% endblock %}
